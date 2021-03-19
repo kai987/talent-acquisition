@@ -11,14 +11,14 @@
 * (2) componentDidUpdate ==> `useEffect(() => {})` 或 `useEffect(() => {}, [n])`
     * 所有的state任意一个更新触发函数 / 只有n值变化，触发函数
 * (3) componentWillUnMount ==> `useEffect(() => {log('渲染时执行'); return () => log('组件要死了')})`
-```
-useEffect(()=>{
-  // 需要在 componentDidMount 执行的内容
-  return function cleanup() {
-    // 需要在 componentWillUnmount 执行的内容      
-  }
-}, [])
-```
+  ```
+  useEffect(()=>{
+    // 需要在 componentDidMount 执行的内容
+    return function cleanup() {
+      // 需要在 componentWillUnmount 执行的内容      
+    }
+  }, [])
+  ```
 
 ### 3. AB父子组件生命周期log顺序
 * A(1)、A(2)、B(1)、B(2)、B(3)、A(3)
@@ -31,10 +31,42 @@ useEffect(()=>{
 * `const [state, dispatch] = useReducer(reducer, initialArg, init)`
 * 是useState的替代方案。它接受一个形如 `(state, action) => newState` 的reducer，并返回当前的state以及与其配套的dispatch方法。
 * 组件只需要发出action，而无需知道如何更新状态。也就是将What to do与How to do解耦。彻底解耦的标志就是：useReducer总是返回相同的dispatch函数（发出action的渠道），不管reducer（状态更新的逻辑）如何变化。
-
+  ```
+  function init(initialCount) {
+    return {count: initialCount};
+  }
+  
+  function reducer(state, action) {
+    switch (action.type) {
+      case 'increment':
+        return {count: state.count + 1};
+      case 'decrement':
+        return {count: state.count - 1};
+      case 'reset':
+        return init(action.payload);
+      default:
+        throw new Error();
+    }
+  }
+  
+  function Counter({initialCount}) {
+    const [state, dispatch] = useReducer(reducer, initialCount, init);
+    return (
+      <>
+        Count: {state.count}
+        <button
+          onClick={() => dispatch({type: 'reset', payload: initialCount})}>
+          Reset
+        </button>
+        <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+        <button onClick={() => dispatch({type: 'increment'})}>+</button>
+      </>
+    );
+  }
+  ```
 ### 6. useContext
 * 接收一个 context 对象（React.createContext 的返回值）并返回该 context 的当前值。当前的 context 值由上层组件中距离当前组件最近的 <MyContext.Provider> 的 value prop 决定。
-```
+  ```
   export const BookContext = createContext();
   
   <BookContext.Provider value={{books, addBook, removeBook}}>
@@ -42,7 +74,7 @@ useEffect(()=>{
   </BookContext.Provider>
   
   const { books, addBook, removeBook } = useContext(BookContext);
-```
+  ```
 
 ### 7. useRef
 * useRef 不仅仅是用来管理 DOM ref 的，它还相当于 this ，可以存放任何变量。
