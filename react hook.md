@@ -15,7 +15,7 @@
   useEffect(()=>{
     // 需要在 componentDidMount 执行的内容
     return function cleanup() {
-      // 需要在 componentWillUnmount 执行的内容      
+      // 需要在 componentWillUnMount 执行的内容      
     }
   }, [])
   ```
@@ -29,6 +29,7 @@
 
 ### 5. useReducer
 * `const [state, dispatch] = useReducer(reducer, initialArg, init)`
+* 当多个state需要一起更新时，就应该考虑使用useReducer
 * 是useState的替代方案。它接受一个形如 `(state, action) => newState` 的reducer，并返回当前的state以及与其配套的dispatch方法。
 * 组件只需要发出action，而无需知道如何更新状态。也就是将What to do与How to do解耦。彻底解耦的标志就是：useReducer总是返回相同的dispatch函数（发出action的渠道），不管reducer（状态更新的逻辑）如何变化。
   ```
