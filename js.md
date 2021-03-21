@@ -11,19 +11,19 @@
     * SourceArray (源数组) 调用reduce()的数组
     * initialValue 作为第一次调用callback函数时的第一个参数的值。如果没有提供初始值，则将使用数组中的第一个元素。
 
-      ```
-        [0, 1, 2, 3, 4].reduce((accumulator, currentValue, currentIndex, array) => {
-          return accumulator + currentValue
-        }, 10)
-      ```
+    ```
+    [0, 1, 2, 3, 4].reduce((accumulator, currentValue, currentIndex, array) => {
+      return accumulator + currentValue
+    }, 10)
+    ```
     
-      | callback | accumulator | currentValue | currentIndex | array | return value |
-      | :--:|:--:|:--:|:--:|:--:|:--:|
-      | first call | 10 | 0 | 0 | [0, 1, 2, 3, 4] | 10 |
-      | second call | 10 | 1 | 1 | [0, 1, 2, 3, 4] | 11 |
-      | third call | 11 | 2 | 2 | [0, 1, 2, 3, 4] | 13 |
-      | fourth call | 13 | 3 | 3 | [0, 1, 2, 3, 4] | 16 |
-      | fifth call | 16 | 4 | 4 | [0, 1, 2, 3, 4] | 20 |
+    | callback | accumulator | currentValue | currentIndex | array | return value |
+    | :--:|:--:|:--:|:--:|:--:|:--:|
+    | first call | 10 | 0 | 0 | [0, 1, 2, 3, 4] | 10 |
+    | second call | 10 | 1 | 1 | [0, 1, 2, 3, 4] | 11 |
+    | third call | 11 | 2 | 2 | [0, 1, 2, 3, 4] | 13 |
+    | fourth call | 13 | 3 | 3 | [0, 1, 2, 3, 4] | 16 |
+    | fifth call | 16 | 4 | 4 | [0, 1, 2, 3, 4] | 20 |
   
     * accumulator 和currentValue的取值有两种情况：
       * 如果调用 reduce() 时提供了initialValue，accumulator取值为initialValue，currentValue取数组中的第一个值； 
@@ -78,7 +78,7 @@
   * 如果作为函数调用，在非严格模式下，this指向全局window对象；在严格模式下，this指向undefined。
   * 作为方法调用，this通常指向调用的对象。
   * 作为构造函数调用，this指向新创建的对象。
-  * 通过call或apply调用，this指向call或apply的第一个参数。
+  * 通过apply或call调用，this指向apply或call的第一个参数。
   
 * 箭头函数没有单独的this值，this在箭头函数创建时确定，从定义时的所在函数继承上下文。
 * 所有函数均可使用bind方法，创建新函数，并绑定到bind方法传入的参数上。被绑定的函数与原始函数具有一致的行为。
@@ -124,3 +124,29 @@
 
 * 同源策略是**协议** + **域名** + **端口**三者相同
 * script 标签不受这个限制
+* 解决方式：JSONP、CORS、nginx反向代理
+
+### 14. sessionStorage、localStorage和cookie的区别
+* 相同点是都是保存在浏览器端、且同源的
+* cookie数据始终在同源的http请求中携带（即使不需要），即cookie在浏览器和服务器间来回传递，而sessionStorage 和 localStorage不会自动把数据发送给服务器，仅在本地保存。cookie 数据还有路径（path）的概念，可以限制cookie只属于某个路径下
+* 存储大小限制也不同，cookie数据不能超过4K，同时因为每次http请求都会携带cookie、所以cookie只适合保存很小的数据，如会话标识。sessionStorage 和 localStorage 虽然也有存储大小的限制，但比cookie大得多，可以达到5M或更大
+* 数据有效期不同，sessionStorage：仅在当前浏览器窗口关闭之前有效；localStorage：始终有效，窗口或浏览器关闭也一直保存，因此用作持久数据；cookie：只在设置的cookie过期时间之前有效，即使窗口关闭或浏览器关闭
+* 作用域不同，sessionStorage不在不同的浏览器窗口中共享，即使是同一个页面；localstorage在所有同源窗口中都是共享的；cookie也是在所有同源窗口中都是共享的
+
+### 15. 如何判断数据类型
+* Object.prototype.toString.call()
+  ```
+    [object Undefined]：未定义的值
+    [object Null]：空值
+    [object String]：字符串
+    [object Number]：数值
+    [object Boolean]：布尔
+    [object Symbol]：唯一值
+    [object Object]：对象
+    [object Array]：数组
+    [object Function]：函数
+    [object Date]：日期
+    [object RegExp]：正则
+    [object Error]：错误
+   ```
+  
